@@ -76,8 +76,6 @@ func (api *API) rq(link string, params map[string]string) (res rqAns, err error)
 		return
 	}
 
-	log.Println(string(content))
-
 	err = json.Unmarshal(content, &res)
 	if err != nil {
 		log.Println("[error]", err)
@@ -89,6 +87,8 @@ func (api *API) rq(link string, params map[string]string) (res rqAns, err error)
 		log.Println("[error]", string(content))
 		return
 	}
+
+	log.Println(string(res.Result))
 
 	return
 }
