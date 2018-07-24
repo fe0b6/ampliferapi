@@ -10,6 +10,8 @@ import (
 	"net/url"
 )
 
+const host = "https://amplifr.com"
+
 // GetProjects - Получаем список проектов
 func (api *API) GetProjects() (ans GetProjectsAns, err error) {
 
@@ -53,7 +55,7 @@ func (api *API) rq(link string, params map[string]string) (res rqAns, err error)
 		q.Add(k, v)
 	}
 
-	resp, err := http.Get(link + "?" + q.Encode())
+	resp, err := http.Get(host + link + "?" + q.Encode())
 	if resp != nil {
 		defer resp.Body.Close()
 	}
