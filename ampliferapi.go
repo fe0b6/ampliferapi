@@ -88,7 +88,5 @@ func (api *API) rq(link string, params map[string]string) (res rqAns, err error)
 		return
 	}
 
-	log.Println(string(res.Result))
-
 	return
 }

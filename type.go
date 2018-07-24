@@ -14,7 +14,7 @@ type rqAns struct {
 
 // GetProjectsAns - объект проектов
 type GetProjectsAns struct {
-	Accounts []Account `json:"accounts"`
+	Projects []Account `json:"projects"`
 }
 
 // GetProjectPostsAns - Объект постов
