@@ -14,13 +14,19 @@ type rqAns struct {
 
 // GetProjectsAns - объект проектов
 type GetProjectsAns struct {
-	Projects []Account `json:"projects"`
+	Projects []Project `json:"projects"`
 }
 
 // GetProjectPostsAns - Объект постов
 type GetProjectPostsAns struct {
 	Posts      []Post         `json:"posts"`
 	Pagination map[string]int `json:"pagination"`
+}
+
+type Project struct {
+	ID             int64     `json:"id"`
+	Name           string    `json:"name"`
+	SocialAccounts []Account `json:"socialAccounts"`
 }
 
 // Account - Объект аккаунта
