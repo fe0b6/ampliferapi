@@ -45,6 +45,7 @@ type Account struct {
 // Post - объект поста
 type Post struct {
 	ID             int64             `json:"id"`
+	Text           string            `json:"text"`
 	Clicks         int               `json:"clicks"`
 	Likes          int               `json:"likes"`
 	Shares         int               `json:"shares"`
