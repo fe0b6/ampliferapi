@@ -23,6 +23,7 @@ type GetProjectPostsAns struct {
 	Pagination map[string]int `json:"pagination"`
 }
 
+// Project - объект проекта
 type Project struct {
 	ID             int64     `json:"id"`
 	Name           string    `json:"name"`
