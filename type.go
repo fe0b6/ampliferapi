@@ -25,8 +25,7 @@ type GetProjectPostsAns struct {
 
 // GetProjectStatsAns - Объект статистики проекта
 type GetProjectStatsAns struct {
-	Stats      []Stat         `json:"Stat"`
-	Pagination map[string]int `json:"pagination"`
+	Stats []Stat `json:"stats"`
 }
 
 // Project - объект проекта
