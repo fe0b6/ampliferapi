@@ -25,7 +25,7 @@ type GetProjectPostsAns struct {
 
 // GetProjectStatsAns - Объект статистики проекта
 type GetProjectStatsAns struct {
-	Stats []Stat `json:"stats"`
+	Stats Stats `json:"stats"`
 }
 
 // Project - объект проекта
@@ -63,8 +63,8 @@ type Post struct {
 	Publications   map[string]string `json:"publications"`
 }
 
-// Stat - статистика
-type Stat struct {
+// Stats - статистика
+type Stats struct {
 	Networks map[string]StatObj `json:"networks"`
 }
 
