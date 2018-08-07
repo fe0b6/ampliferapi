@@ -28,6 +28,11 @@ type GetProjectStatsAns struct {
 	Stats Stats `json:"stats"`
 }
 
+// GetProjectPostStatsAns - объект статистики поста
+type GetProjectPostStatsAns struct {
+	Stats PostStats `json:"stats"`
+}
+
 // Project - объект проекта
 type Project struct {
 	ID             int64     `json:"id"`
@@ -63,6 +68,12 @@ type Post struct {
 	Publications   map[string]string `json:"publications"`
 }
 
+// PostStats - статистика поста
+type PostStats struct {
+	Pubs    map[string]StatObj `json:"pubs"`
+	Preface string             `json:"preface"`
+}
+
 // Stats - статистика
 type Stats struct {
 	Networks map[string]StatObj `json:"networks"`
@@ -71,6 +82,8 @@ type Stats struct {
 // StatObj - объект статистики
 type StatObj struct {
 	Network         string         `json:"network"`
+	Name            string         `json:"name"`
+	URL             string         `json:"url"`
 	Subscribers     int            `json:"subscribers"`
 	Stats           map[string]int `json:"stats"`
 	SubscribersDiff int            `json:"subscribersDiff"`
