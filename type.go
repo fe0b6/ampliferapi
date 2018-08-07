@@ -65,6 +65,7 @@ type Post struct {
 	FanUniqueViews int               `json:"fanUniqueViews"`
 	TotalViews     int               `json:"totalViews"`
 	VideoPlays     int               `json:"videoPlays"`
+	Socials        []int             `json:"socials"`
 	States         map[string]string `json:"states"`
 	Publications   map[string]string `json:"publications"`
 }
