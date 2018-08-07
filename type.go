@@ -23,6 +23,12 @@ type GetProjectPostsAns struct {
 	Pagination map[string]int `json:"pagination"`
 }
 
+// GetProjectStatsAns - Объект статистики проекта
+type GetProjectStatsAns struct {
+	Stats      []Stat         `json:"Stat"`
+	Pagination map[string]int `json:"pagination"`
+}
+
 // Project - объект проекта
 type Project struct {
 	ID             int64     `json:"id"`
@@ -56,4 +62,17 @@ type Post struct {
 	VideoPlays     int               `json:"videoPlays"`
 	States         map[string]string `json:"states"`
 	Publications   map[string]string `json:"publications"`
+}
+
+// Stat - статистика
+type Stat struct {
+	Networks map[string]StatObj `json:"networks"`
+}
+
+// StatObj - объект статистики
+type StatObj struct {
+	Network         string         `json:"network"`
+	Subscribers     int            `json:"subscribers"`
+	Stats           map[string]int `json:"stats"`
+	SubscribersDiff int            `json:"subscribersDiff"`
 }

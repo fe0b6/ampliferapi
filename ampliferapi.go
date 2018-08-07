@@ -48,6 +48,24 @@ func (api *API) GetProjectPosts(projectID int64, params map[string]string) (ans 
 	return
 }
 
+// GetProjectStats - Получаем статистику проекта
+func (api *API) GetProjectStats(projectID int64, params map[string]string) (ans GetProjectStatsAns, err error) {
+
+	res, err := api.rq(fmt.Sprintf("/api/v1/projects/%d/stats", projectID), params)
+	if err != nil {
+		log.Println("[error]", err)
+		return
+	}
+
+	err = json.Unmarshal(res.Result, &ans)
+	if err != nil {
+		log.Println("[error]", err)
+		return
+	}
+
+	return
+}
+
 func (api *API) rq(link string, params map[string]string) (res rqAns, err error) {
 	q := url.Values{}
 	q.Add("access_token", api.AccessToken)
