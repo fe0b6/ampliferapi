@@ -78,7 +78,10 @@ type PostStats struct {
 
 // Stats - статистика
 type Stats struct {
-	Networks map[string]StatObj `json:"networks"`
+	From     string              `json:"from"`
+	To       string              `json:"to"`
+	Networks map[string]StatObj  `json:"networks"`
+	Posts    map[string]StatPost `json:"posts"`
 }
 
 // StatObj - объект статистики
@@ -89,4 +92,13 @@ type StatObj struct {
 	Subscribers     int            `json:"subscribers"`
 	Stats           map[string]int `json:"stats"`
 	SubscribersDiff int            `json:"subscribersDiff"`
+}
+
+// StatPost - статистика поста
+type StatPost struct {
+	Network     string         `json:"network"`
+	NetworkName string         `json:"networkName"`
+	URL         string         `json:"url"`
+	Preface     string         `json:"preface"`
+	Stats       map[string]int `json:"stats"`
 }
