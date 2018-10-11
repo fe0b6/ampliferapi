@@ -210,7 +210,9 @@ func getCacheKey(link string, params map[string]string) (key []byte) {
 		}
 	}
 
-	return h.Sum(nil)
+	key = []byte("ampliferapi:")
+
+	return append(key, h.Sum(nil)...)
 }
 
 func getCache(cacheKey []byte) (ans []byte, err error) {
