@@ -1,6 +1,7 @@
 package ampliferapi
 
 import (
+	"crypto/sha512"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -8,9 +9,25 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"sort"
+	"time"
+
+	"github.com/fe0b6/tools"
+	"github.com/syndtr/goleveldb/leveldb"
 )
 
 const host = "https://amplifr.com"
+
+var (
+	cacheHandler *leveldb.DB
+	cacheTime    int
+)
+
+// InitCache - инициализация кэша
+func InitCache(h *leveldb.DB, ex int) {
+	cacheHandler = h
+	cacheTime = ex
+}
 
 // GetProjects - Получаем список проектов
 func (api *API) GetProjects() (ans GetProjectsAns, err error) {
@@ -103,6 +120,23 @@ func (api *API) GetProjectStatsByPost(projectID int64, params map[string]string)
 }
 
 func (api *API) rq(link string, params map[string]string) (res rqAns, err error) {
+	var cacheKey []byte
+	if cacheTime > 0 {
+		cacheKey = getCacheKey(link, params)
+	}
+
+	// Чекаем кэш
+	if len(cacheKey) > 0 {
+		var b []byte
+		b, err = getCache(cacheKey)
+		if err != nil && err.Error() != "leveldb: not found" {
+			log.Println("[error]", err)
+		} else if len(b) > 0 {
+			tools.FromGob(&res, b)
+			return
+		}
+	}
+
 	q := url.Values{}
 	q.Add("access_token", api.AccessToken)
 	for k, v := range params {
@@ -139,6 +173,75 @@ func (api *API) rq(link string, params map[string]string) (res rqAns, err error)
 	if !res.OK {
 		err = errors.New("bad ans")
 		log.Println("[error]", string(content))
+		return
+	}
+
+	// Если ответ хороший - кэшируем его
+	if len(cacheKey) > 0 {
+		err2 := setCache(cacheKey, tools.ToGob(res))
+		if err2 != nil {
+			log.Println("[error]", err2)
+		}
+	}
+
+	return
+}
+
+func getCacheKey(link string, params map[string]string) (key []byte) {
+	h := sha512.New()
+
+	_, err := h.Write([]byte(link))
+	if err != nil {
+		log.Println("[error]", err)
+		return
+	}
+
+	var keys []string
+	for k := range params {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, k := range keys {
+		_, err := h.Write([]byte(k + "=" + params[k]))
+		if err != nil {
+			log.Println("[error]", err)
+			return
+		}
+	}
+
+	return h.Sum(nil)
+}
+
+func getCache(cacheKey []byte) (ans []byte, err error) {
+	var bt []byte
+	bt, err = cacheHandler.Get(cacheKey, nil)
+	if err != nil {
+		if err.Error() != "leveldb: not found" {
+			log.Println("[error]", err)
+		}
+		return
+	}
+
+	var obj cacheObj
+	tools.FromGob(&obj, bt)
+
+	if obj.Expire.Before(time.Now()) {
+		cacheHandler.Delete(cacheKey, nil)
+		return
+	}
+
+	ans = obj.Data
+	return
+}
+
+func setCache(key []byte, b []byte) (err error) {
+	err = cacheHandler.Put(key, tools.ToGob(cacheObj{
+		Data:   b,
+		Expire: time.Now().Add(time.Duration(cacheTime) * time.Second),
+	}), nil)
+	if err != nil {
+		log.Println("[error]", err)
 		return
 	}
 

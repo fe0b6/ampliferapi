@@ -1,6 +1,9 @@
 package ampliferapi
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"time"
+)
 
 // API - объкт api
 type API struct {
@@ -101,4 +104,9 @@ type StatPost struct {
 	URL         string         `json:"url"`
 	Preface     string         `json:"preface"`
 	Stats       map[string]int `json:"stats"`
+}
+
+type cacheObj struct {
+	Data   []byte
+	Expire time.Time
 }
