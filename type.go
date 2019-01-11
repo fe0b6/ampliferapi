@@ -95,6 +95,7 @@ type StatObj struct {
 	Subscribers     int            `json:"subscribers"`
 	Stats           map[string]int `json:"stats"`
 	SubscribersDiff int            `json:"subscribersDiff"`
+	LinkClicks      int            `json:"linkClicks"`
 }
 
 // StatPost - статистика поста
